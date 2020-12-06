@@ -1,9 +1,12 @@
+
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
 const emoji1 = "😄";
 const emoji2 = "💩";
 const emoji3 = "🥧";
+
+let common = [];
 
 
 var listEmoji = [emoji1, emoji2, emoji3];
@@ -23,9 +26,6 @@ client.on('message', message => {
   if (message.channel.type === 'dm' && !message.author.bot) {
     user_id = message.author.id;
     console.log(user_id);
-
-
-    let common = {};
 
     let count = 0;
     client.guilds.cache.forEach(counting =>{
@@ -47,22 +47,28 @@ client.on('message', message => {
         guild.members.cache.each(member=>{
 
           if (member.user.id == user_id){
-            common[guild.id] = {
+            common.push({
               "serverID": guild.id,
               "serverName": guild.name,
               "userID": member.user.id,
               "userName": member.user.username
-            }
+            });
           }
         });
 
         if(lastGuild == guild){
           //here is all common servers
-          console.log(common);
+
+          common.forEach(serv =>{
+            var serverName = serv.serverName;
+            var serverID = serv.serverID;
+            console.log(serv.serverName);
+          });
         }
 
       });
     });
+
     
     var react1 = listEmoji[Math.floor(Math.random() * numEmojis)];
     var react2 = listEmoji[Math.floor(Math.random() * numEmojis)];
