@@ -19,12 +19,15 @@ client.once('ready', () => {
 client.login('Nzg1MTk0NTExNjY3NDI5NDA3.X80TXw.B-sZMaGaTRznmnaw1OPbteivJx8');
 
 client.on('message', message => {
+  let user_id = null;
   if (message.channel.type === 'dm') {
-    console.log(listEmoji);
+    user_id = message.author.id;
+    console.log(user_id);
+
     var numEmojis = listEmoji.length;
 
     var messageToSend = message.content;
-    client.channels.cache.get('614197579650957352').send(messageToSend).then(async sentMessage => {
+    client.channels.cache.get('785187351693492246').send(messageToSend).then(async sentMessage => {
       try {
         await sentMessage.react(listEmoji[Math.floor(Math.random() * numEmojis)]);
         await sentMessage.react(listEmoji[Math.floor(Math.random() * numEmojis)]);
@@ -33,7 +36,31 @@ client.on('message', message => {
         console.error("couldn't load emoji");
       }
     })
-
+  } else {
     
   }
+
+
+  let common = {};
+
+  client.users.fetch(user_id).then(function (res) {
+    //console.log(res);
+    client.guilds.cache.forEach(guild => {
+      guild.members.fetch(user_id).then(function () {
+        guild.members.cache.each(member => {
+
+          if (member.user.id == user_id) {
+            common[guild.id] = {
+              "serverID": guild.id,
+              "serverName": guild.name,
+              "userID": member.user.id,
+              "userName": member.user.username
+            }
+          }
+        });
+
+        console.log(common);
+      });
+    });
+  })
 });
