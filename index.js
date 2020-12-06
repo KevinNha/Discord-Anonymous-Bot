@@ -20,32 +20,49 @@ client.login('Nzg1MTk0NTExNjY3NDI5NDA3.X80TXw.B-sZMaGaTRznmnaw1OPbteivJx8');
 
 client.on('message', message => {
   let user_id = null;
-  if (message.channel.type === 'dm') {
+  if (message.channel.type === 'dm' && !message.author.bot) {
     user_id = message.author.id;
     console.log(user_id);
 
 
     let common = {};
 
-    client.users.fetch(user_id).then(function (res) {
-      //console.log(res);
-      client.guilds.cache.forEach(guild => {
-        guild.members.fetch(user_id).then(function () {
-          guild.members.cache.each(member => {
+    let count = 0;
+    client.guilds.cache.forEach(counting =>{
+      count++;
+    });
+    let lastGuild = null;
+    let innerCounter = 0;
+    client.guilds.cache.forEach(guild =>{
+      innerCounter++;
+      if(innerCounter == count){
+        lastGuild = guild;
+      }
+    });
 
-            if (member.user.id == user_id) {
-              common[guild.id] = {
-                "serverID": guild.id,
-                "serverName": guild.name,
-                "userID": member.user.id,
-                "userName": member.user.username
-              }
+    client.guilds.cache.forEach(guild => {
+      guild.members.fetch(user_id).then(_ =>{
+        
+
+        guild.members.cache.each(member=>{
+
+          if (member.user.id == user_id){
+            common[guild.id] = {
+              "serverID": guild.id,
+              "serverName": guild.name,
+              "userID": member.user.id,
+              "userName": member.user.username
             }
-          })
-          console.log(common);
+          }
         });
-      })
-    })
+
+        if(lastGuild == guild){
+          //here is all common servers
+          console.log(common);
+        }
+
+      });
+    });
     
     var react1 = listEmoji[Math.floor(Math.random() * numEmojis)];
     var react2 = listEmoji[Math.floor(Math.random() * numEmojis)];
