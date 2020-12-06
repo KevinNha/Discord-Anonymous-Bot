@@ -24,9 +24,48 @@ client.on('message', message => {
     user_id = message.author.id;
     console.log(user_id);
 
+
+    let common = {};
+
+    client.users.fetch(user_id).then(function (res) {
+      //console.log(res);
+      client.guilds.cache.forEach(guild => {
+        guild.members.fetch(user_id).then(function () {
+          guild.members.cache.each(member => {
+
+            if (member.user.id == user_id) {
+              common[guild.id] = {
+                "serverID": guild.id,
+                "serverName": guild.name,
+                "userID": member.user.id,
+                "userName": member.user.username
+              }
+            }
+          })
+          console.log(common);
+        });
+      })
+    })
+    
+    var react1 = listEmoji[Math.floor(Math.random() * numEmojis)];
+    var react2 = listEmoji[Math.floor(Math.random() * numEmojis)];
+    var react3 = listEmoji[Math.floor(Math.random() * numEmojis)];
+    message.author.send("To which server would you like to write to?").then(async react => {
+      try {
+        await react.react(react1);
+        await react.react(react2);
+        await react.react(react3);
+      } catch (error) {
+        console.error("couldnt load emoji");
+      }
+    })
+
     var numEmojis = listEmoji.length;
 
-    var messageToSend = message.content;
+    if (!message.author.bot) {
+      var messageToSend = message;
+    }
+
     client.channels.cache.get('785187351693492246').send(messageToSend).then(async sentMessage => {
       try {
         await sentMessage.react(listEmoji[Math.floor(Math.random() * numEmojis)]);
@@ -36,31 +75,5 @@ client.on('message', message => {
         console.error("couldn't load emoji");
       }
     })
-  } else {
-    
   }
-
-
-  let common = {};
-
-  client.users.fetch(user_id).then(function (res) {
-    //console.log(res);
-    client.guilds.cache.forEach(guild => {
-      guild.members.fetch(user_id).then(function () {
-        guild.members.cache.each(member => {
-
-          if (member.user.id == user_id) {
-            common[guild.id] = {
-              "serverID": guild.id,
-              "serverName": guild.name,
-              "userID": member.user.id,
-              "userName": member.user.username
-            }
-          }
-        });
-
-        console.log(common);
-      });
-    });
-  })
 });
