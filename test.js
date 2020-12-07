@@ -31,7 +31,7 @@ client.on('message', message => {
     getCommon(message);
   }
 
-  if (message.author.bot) {
+  if (message.author.bot && message.channel.type === 'dm') {
     for (i = 0; i < numEmojis; i++) {
       message.react(emojis[i]);
     }
@@ -108,10 +108,6 @@ function addCommon(element) {
   if (add) {
     common.push(element);
   }
-}
-
-function sendMessage() {
-  
 }
 
 function sendMessage(serverID, message){
