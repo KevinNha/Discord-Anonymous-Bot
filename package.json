@@ -1,24 +1,10 @@
 {
-  "name": "anonymousbot",
-
-  "description": "Example",
-
-  "version": "1.0.0",
-
-  "main": "anonbot.js",
-
-  "scripts": {
-
-    "start": "node anonbot.js"
-
-  },
-
-  "dependencies": {
-
-    "discord.js": "11.1.0",
-
-    "request": "2.81.0"
-
-  }
-
+  "engines": {
+  "node": "12.x",
+  "npm": "*"
+},
+"scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "start": "node anonbot.js"
+}
 }
