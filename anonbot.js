@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 // Global Variables
 var anonymousMsg = "";
 let msgSender = null;
