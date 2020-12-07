@@ -38,7 +38,7 @@ client.on('message', message => {
       return emojis.includes(reaction.emoji.name) && user.id === anonMsg.author.id;
     };
 
-    message.awaitReactions(filter, {max: 1, time: 60000000, error: ['time'] })
+    message.awaitReactions(filter, {max: 1, time: 60000, error: ['time'] })
     .then(collected => {
       const reaction = collected.first();
 
@@ -53,9 +53,10 @@ client.on('message', message => {
       }
     })
     .catch(collected => {
-      console.error("User took too long to respond.");
+      message.reply("You took too long to respond.");
     })
   }
+  message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
 });
 
 // To get a list of mutual servers
