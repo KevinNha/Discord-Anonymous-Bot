@@ -3,6 +3,8 @@ let anonymousMsg = null;
 let msgSender = null;
 let senderID = null;
 let common = [];
+let emojis = ['🐶', '🐱', '🐭', '🐹']
+let numEmojis = 0;
 
 const Discord = require('discord.js');
 const client = new Discord.Client();
@@ -21,6 +23,16 @@ client.on('message', message => {
     senderID = message.author.id
 
     getCommon(message);
+  }
+
+  if (message.author.bot) {
+    for (i = 0; i < numEmojis; i++) {
+      message.react(emojis[i]);
+    }
+    // message.react('🐶')
+    //   .then(() => message.react('🐱'))
+    //   .then(() => message.react('🐭'))
+    //   .then(() => message.react('🐹'))
   }
 });
 
@@ -56,11 +68,12 @@ async function getCommon(orignalMessage) {
         }
       });
       if (lastGuild == guild) {
+        numEmojis = common.length;
         let chooseServer = "To which server would you like to write to?";
         for (i = 0; i < common.length; i++)  {
-          chooseServer += "\n" + common[i].serverName;
+          chooseServer += "\n" + emojis[i] + common[i].serverName;
         }
-        orignalMessage.author.send(chooseServer);
+        orignalMessage.author.send(chooseServer)
       }
     })
   });
