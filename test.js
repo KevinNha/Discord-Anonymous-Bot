@@ -6,6 +6,10 @@ let common = [];
 let emojis = ['🐶', '🐱', '🐭', '🐹']
 let numEmojis = 0;
 
+const filter = (reaction, user) => {
+	return emojis.includes(reaction.emoji.name) && user.id === senderID;
+};
+
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
@@ -28,11 +32,15 @@ client.on('message', message => {
   if (message.author.bot) {
     for (i = 0; i < numEmojis; i++) {
       message.react(emojis[i]);
+      message.awaitReactions(filter, {max: 1, time: 60000, error: ['time'] })
+        .then(collected => {
+          const reaction = collected.first();
+
+          if (reaction.emoji.name === emojis[0]) {
+            client.channels.get(common[0].serverID)
+          }
+        })
     }
-    // message.react('🐶')
-    //   .then(() => message.react('🐱'))
-    //   .then(() => message.react('🐭'))
-    //   .then(() => message.react('🐹'))
   }
 });
 
