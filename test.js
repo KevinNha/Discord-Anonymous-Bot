@@ -32,25 +32,29 @@ client.on('message', message => {
   }
 
   if (message.author.bot) {
-    for (i = 0; i < numEmojis; i++) {
-      message.react(emojis[i]);
-    }
-    message.awaitReactions(filter, {max: 1, time: 60000, error: ['time'] })
-    .then(collected => {
-      const reaction = collected.first();
-
-      if (reaction.emoji.name === emojis[0]) {
-        sendMessage(common[0].serverID, anonymousMsg)
-      } else if (reaction.emoji.name === emojis[1]) {
-        sendMessage(common[1].serverID, anonymousMsg)
-      } else if (reaction.emoji.name === emojis[2]) {
-        sendMessage(common[2].serverID, anonymousMsg)
-      } else if (reaction.emoji.name === emojis[3]) {
-        sendMessage(common[3].serverID, anonymousMsg)
+    if (message.channel.type === 'dm') {
+      for (i = 0; i < numEmojis; i++) {
+        message.react(emojis[i]);
       }
-      
-    })
+    }
   }
+  message.awaitReactions(filter, {max: 1, time: 60000, error: ['time'] })
+  .then(collected => {
+    const reaction = collected.first();
+
+    if (reaction.emoji.name === emojis[0]) {
+      sendMessage(common[0].serverID, anonymousMsg)
+    } else if (reaction.emoji.name === emojis[1]) {
+      sendMessage(common[1].serverID, anonymousMsg)
+    } else if (reaction.emoji.name === emojis[2]) {
+      sendMessage(common[2].serverID, anonymousMsg)
+    } else if (reaction.emoji.name === emojis[3]) {
+      sendMessage(common[3].serverID, anonymousMsg)
+    }
+  })
+  .catch(collected => {
+    message.reply("took too long.");
+  })
 });
 
 // To get a list of mutual servers
