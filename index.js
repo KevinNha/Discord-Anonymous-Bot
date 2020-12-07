@@ -70,7 +70,7 @@ client.on('message', message => {
           }
 
           const filter = (reaction, user) => {
-            return ['👍', '👎'].includes(reaction.emoji.name) && user.id === message.author.id;
+            return ['emoji1', 'emoji2'].includes(reaction.emoji.name) && user.id === message.author.id;
           };
 
           message.author.send("To which server would you like to write to?" + "\n" + serverNames)
