@@ -7,12 +7,12 @@ let emojis = ['🐶', '🐱', '🐭', '🐹']
 let numEmojis = 0;
 
 const channelName = "anonbot";
-const config = require('./config.json');
+const config = require('dotenv').config();
 
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
-client.login(config.token);
+client.login(process.env.TOKEN);
 
 client.once('ready', () => {
   console.log('Ready!');
