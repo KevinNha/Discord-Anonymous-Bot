@@ -2,7 +2,7 @@
   "name": "dcAnonBot",
   "version": "1.0.0",
   "description": "A Discord bot to allow people to submit questions for anonymity.",
-  "main": "anonbot.js",
+  "main": "main.js",
   "dependencies": {
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
