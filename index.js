@@ -22,6 +22,7 @@ client.once('ready', () => {
 client.login('Nzg1MTk0NTExNjY3NDI5NDA3.X80TXw.B-sZMaGaTRznmnaw1OPbteivJx8');
 
 client.on('message', message => {
+
   let user_id = null;
   if (message.channel.type === 'dm' && !message.author.bot) {
     user_id = message.author.id;
@@ -47,27 +48,26 @@ client.on('message', message => {
         guild.members.cache.each(member=>{
 
           if (member.user.id == user_id){
-            common.push({
+            let toAdd = {
               "serverID": guild.id,
               "serverName": guild.name,
               "userID": member.user.id,
               "userName": member.user.username
-            });
+            };
+
+            addCommon(toAdd);
           }
         });
 
         if(lastGuild == guild){
           //here is all common servers
 
-          common.forEach(serv =>{
-            var serverName = serv.serverName;
-            var serverID = serv.serverID;
-            console.log(serv.serverName);
-          });
+          console.log(common);
         }
 
       });
     });
+
 
     
     var react1 = listEmoji[Math.floor(Math.random() * numEmojis)];
@@ -100,3 +100,17 @@ client.on('message', message => {
     })
   }
 });
+
+
+function addCommon(element){
+  let serverID = element["serverID"];
+  let add = true;
+  common.forEach(server =>{
+    if(server["serverID"] == serverID){
+      add = false;
+    }
+  });
+  if(add){
+    common.push(element);
+  }
+}
