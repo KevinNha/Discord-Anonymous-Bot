@@ -17,6 +17,7 @@ client.once('ready', () => {
 client.login('Nzg1MTk0NTExNjY3NDI5NDA3.X80TXw.B-sZMaGaTRznmnaw1OPbteivJx8');
 
 client.on('message', message => {
+
   let user_id = null;
   if (message.channel.type === 'dm' && !message.author.bot) {
     user_id = message.author.id;
@@ -42,17 +43,20 @@ client.on('message', message => {
         guild.members.cache.each(member=>{
 
           if (member.user.id == user_id){
-            common.push({
+            let toAdd = {
               "serverID": guild.id,
               "serverName": guild.name,
               "userID": member.user.id,
               "userName": member.user.username
-            });
-      }
-    });
+            };
+
+            addCommon(toAdd);
+          }
+        });
 
         if(lastGuild == guild){
           //here is all common servers
+
           console.log(common);
         }
 
@@ -116,3 +120,17 @@ client.on('message', message => {
     }
   }
 });
+
+
+function addCommon(element){
+  let serverID = element["serverID"];
+  let add = true;
+  common.forEach(server =>{
+    if(server["serverID"] == serverID){
+      add = false;
+    }
+  });
+  if(add){
+    common.push(element);
+  }
+}
