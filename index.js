@@ -25,24 +25,24 @@ client.on('message', message => {
     var messageToSend = message;
 
     let count = 0;
-    client.guilds.cache.forEach(counting =>{
+    client.guilds.cache.forEach(counting => {
       count++;
     });
     let lastGuild = null;
     let innerCounter = 0;
-    client.guilds.cache.forEach(guild =>{
+    client.guilds.cache.forEach(guild => {
       innerCounter++;
-      if(innerCounter == count){
+      if (innerCounter == count) {
         lastGuild = guild;
       }
     });
 
     client.guilds.cache.forEach(guild => {
-      guild.members.fetch(user_id).then(_ =>{
-        
-        guild.members.cache.each(member=>{
+      guild.members.fetch(user_id).then(_ => {
 
-          if (member.user.id == user_id){
+        guild.members.cache.each(member => {
+
+          if (member.user.id == user_id) {
             let toAdd = {
               "serverID": guild.id,
               "serverName": guild.name,
@@ -54,58 +54,65 @@ client.on('message', message => {
           }
         });
 
-        if(lastGuild == guild){
+        if (lastGuild == guild) {
           //here is all common servers
 
           console.log(common);
+
+          listEmoji = [emoji1, emoji2, emoji3, emoji1, emoji2]
+
+          let serverIDs = [];
+          let serverNames = [];
+
+          for (i = 0; i < common.length; i++) {
+            serverIDs.push(common[i].serverID)
+            serverNames.push(listEmoji[i] + common[i].serverName + "\n")
+          }
+
+          const filter = (reaction, user) => {
+            return ['👍', '👎'].includes(reaction.emoji.name) && user.id === message.author.id;
+          };
+
+          message.author.send("To which server would you like to write to?" + "\n" + serverNames)
+            .then(msg => {
+              msg.awaitReactions(filter, {
+                  max: 1,
+                  time: 10000,
+                  errors: ['time']
+                })
+                .then(collected => {
+                  const reaction = collected.first();
+
+                  if (reaction.emoji.name === emoji1) {
+                    msg.reply("sssdasdasdasd");
+                  } else {
+                    msg.reply("ioikoijoijoij");
+                  }
+                })
+                .catch(collected => {
+                  msg.reply("iwiieieieieieiieqw");
+                })
+            })
+          // .then(react => {
+          //   try {
+          //     react.react(react1);
+          //     react.react(react2);
+          //     react.react(react3);
+          //   } catch (error) {
+          //     console.error("couldnt load emoji");
+          //   }
+          // })
+
+          var numEmojis = listEmoji.length;
+
+
         }
 
       });
     });
-    
 
-    listEmoji = [emoji1, emoji2, emoji3, emoji1, emoji2]
 
-    let serverIDs = [];
-    let serverNames = [];
-    
-    for (i = 0; i < common.length; i++) {
-      serverIDs.push(common[i].serverID)
-      serverNames.push(listEmoji[i] + common[i].serverName + "\n" )
-    }
 
-    const filter = (reaction, user) => {
-      return ['👍', '👎'].includes(reaction.emoji.name) && user.id === message.author.id;
-    };
-
-    message.author.send("To which server would you like to write to?" + "\n" + serverNames)
-      .then(msg => {msg.awaitReactions(filter, {max: 1, time: 10000, errors: ['time']})
-      .then(collected => {
-        const reaction = collected.first();
-
-        if (reaction.emoji.name === emoji1) {
-          msg.reply("sssdasdasdasd");
-        } else {
-          msg.reply("ioikoijoijoij");
-        }
-      })
-      .catch(collected => {
-        msg.reply("iwiieieieieieiieqw");
-      })
-    })
-    // .then(react => {
-    //   try {
-    //     react.react(react1);
-    //     react.react(react2);
-    //     react.react(react3);
-    //   } catch (error) {
-    //     console.error("couldnt load emoji");
-    //   }
-    // })
-
-    var numEmojis = listEmoji.length;
-
-    client.channels.cache.get('785187351693492246').send(messageToSend).then
   }
 
   if (message.author.bot) {
@@ -122,15 +129,15 @@ client.on('message', message => {
 });
 
 
-function addCommon(element){
+function addCommon(element) {
   let serverID = element["serverID"];
   let add = true;
-  common.forEach(server =>{
-    if(server["serverID"] == serverID){
+  common.forEach(server => {
+    if (server["serverID"] == serverID) {
       add = false;
     }
   });
-  if(add){
+  if (add) {
     common.push(element);
   }
 }
