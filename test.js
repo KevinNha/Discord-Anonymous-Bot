@@ -8,10 +8,6 @@ let numEmojis = 0;
 
 const channelName = "anonbot";
 
-const filter = (reaction, user) => {
-	return emojis.includes(reaction.emoji.name) && user.id === senderID;
-};
-
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
@@ -24,37 +20,41 @@ client.once('ready', () => {
 client.on('message', message => {
   // Takes the message from user
   if (message.channel.type === 'dm' && !message.author.bot) {
+    anonMsg = message;
     anonymousMsg = message.content;
     msgSender = message.author.username
     senderID = message.author.id
-
+    common = [];
     getCommon(message);
   }
 
-  if (message.author.bot) {
-    if (message.channel.type === 'dm') {
-      for (i = 0; i < numEmojis; i++) {
-        message.react(emojis[i]);
-      }
+  if (message.author.bot && message.channel.type === 'dm') {
+    for (i = 0; i < numEmojis; i++) {
+      message.react(emojis[i]);
     }
-  }
-  message.awaitReactions(filter, {max: 1, time: 60000, error: ['time'] })
-  .then(collected => {
-    const reaction = collected.first();
 
-    if (reaction.emoji.name === emojis[0]) {
-      sendMessage(common[0].serverID, anonymousMsg)
-    } else if (reaction.emoji.name === emojis[1]) {
-      sendMessage(common[1].serverID, anonymousMsg)
-    } else if (reaction.emoji.name === emojis[2]) {
-      sendMessage(common[2].serverID, anonymousMsg)
-    } else if (reaction.emoji.name === emojis[3]) {
-      sendMessage(common[3].serverID, anonymousMsg)
-    }
-  })
-  .catch(collected => {
-    message.reply("took too long.");
-  })
+    const filter = (reaction, user) => {
+      return emojis.includes(reaction.emoji.name) && user.id === anonMsg.author.id;
+    };
+
+    message.awaitReactions(filter, {max: 1, time: 60000, error: ['time'] })
+    .then(collected => {
+      const reaction = collected.first();
+
+      if (reaction.emoji.name === emojis[0]) {
+        sendMessage(common[0].serverID, anonymousMsg)
+      } else if (reaction.emoji.name === emojis[1]) {
+        sendMessage(common[1].serverID, anonymousMsg)
+      } else if (reaction.emoji.name === emojis[2]) {
+        sendMessage(common[2].serverID, anonymousMsg)
+      } else if (reaction.emoji.name === emojis[3]) {
+        sendMessage(common[3].serverID, anonymousMsg)
+      }
+    })
+    .catch(collected => {
+      message.reply("took too long.");
+    })
+  }
 });
 
 // To get a list of mutual servers
@@ -112,10 +112,6 @@ function addCommon(element) {
   if (add) {
     common.push(element);
   }
-}
-
-function sendMessage() {
-  
 }
 
 function sendMessage(serverID, message){
