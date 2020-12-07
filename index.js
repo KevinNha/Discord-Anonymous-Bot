@@ -5,6 +5,8 @@ const emoji1 = "😄";
 const emoji2 = "💩";
 const emoji3 = "🥧";
 
+const channelName = "anonbot";
+
 let common = [];
 
 var listEmoji = [];
@@ -59,6 +61,7 @@ client.on('message', message => {
 
           console.log(common);
 
+          sendMessage("785187351243915265",message.content);
           listEmoji = [emoji1, emoji2, emoji3, emoji1, emoji2]
 
           let serverIDs = [];
@@ -140,4 +143,10 @@ function addCommon(element) {
   if (add) {
     common.push(element);
   }
+}
+
+function sendMessage(serverID, message){
+  let guild = client.guilds.cache.get(serverID);
+  const channel = guild.channels.cache.find(channel => channel.name === channelName)
+    channel.send(message);
 }
