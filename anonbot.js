@@ -52,9 +52,9 @@ client.on('message', message => {
         sendMessage(common[3].serverID, anonymousMsg)
       }
     })
-    .catch(collected => {
-      message.reply("took too long.");
-    })
+//     .catch(collected => {
+//       message.reply("took too long.");
+//     })
   }
 });
 
