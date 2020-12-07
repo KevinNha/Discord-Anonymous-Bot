@@ -38,7 +38,7 @@ client.on('message', message => {
       return emojis.includes(reaction.emoji.name) && user.id === anonMsg.author.id;
     };
 
-    message.awaitReactions(filter, {max: 1, time: 60000, error: ['time'] })
+    message.awaitReactions(filter, {max: 1, time: 60000000, error: ['time'] })
     .then(collected => {
       const reaction = collected.first();
 
