@@ -117,6 +117,6 @@ function addCommon(element) {
 
 function sendMessage(serverID, message){
   let guild = client.guilds.cache.get(serverID);
-  const channel = guild.channels.cache.find(channel => channel.name === channelName)
+  const channel = guild.channels.cache.find(channel => channel.name.includes(channelName))
     channel.send(message);
 }
