@@ -1,10 +1,12 @@
 // Global Variables
-let anonymousMsg = null;
+var anonymousMsg = "";
 let msgSender = null;
 let senderID = null;
 let common = [];
 let emojis = ['🐶', '🐱', '🐭', '🐹']
 let numEmojis = 0;
+
+const channelName = "anonbot";
 
 const filter = (reaction, user) => {
 	return emojis.includes(reaction.emoji.name) && user.id === senderID;
@@ -22,7 +24,7 @@ client.once('ready', () => {
 client.on('message', message => {
   // Takes the message from user
   if (message.channel.type === 'dm' && !message.author.bot) {
-    anonymousMsg = message.content
+    anonymousMsg = message.content;
     msgSender = message.author.username
     senderID = message.author.id
 
@@ -32,15 +34,22 @@ client.on('message', message => {
   if (message.author.bot) {
     for (i = 0; i < numEmojis; i++) {
       message.react(emojis[i]);
-      message.awaitReactions(filter, {max: 1, time: 60000, error: ['time'] })
-        .then(collected => {
-          const reaction = collected.first();
-
-          if (reaction.emoji.name === emojis[0]) {
-            client.channels.get(common[0].serverID)
-          }
-        })
     }
+    message.awaitReactions(filter, {max: 1, time: 60000, error: ['time'] })
+    .then(collected => {
+      const reaction = collected.first();
+
+      if (reaction.emoji.name === emojis[0]) {
+        sendMessage(common[0].serverID, anonymousMsg)
+      } else if (reaction.emoji.name === emojis[1]) {
+        sendMessage(common[1].serverID, anonymousMsg)
+      } else if (reaction.emoji.name === emojis[2]) {
+        sendMessage(common[2].serverID, anonymousMsg)
+      } else if (reaction.emoji.name === emojis[3]) {
+        sendMessage(common[3].serverID, anonymousMsg)
+      }
+      
+    })
   }
 });
 
@@ -103,4 +112,10 @@ function addCommon(element) {
 
 function sendMessage() {
   
+}
+
+function sendMessage(serverID, message){
+  let guild = client.guilds.cache.get(serverID);
+  const channel = guild.channels.cache.find(channel => channel.name === channelName)
+    channel.send(message);
 }
