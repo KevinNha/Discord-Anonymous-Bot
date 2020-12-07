@@ -1,31 +1,12 @@
 {
-  "name": "dcAnonBot",
-  "version": "1.0.0",
+  "name": "dcanonbot",
   "description": "A Discord bot to allow people to submit questions for anonymity.",
-  "main": "main.js",
-  "dependencies": {
-    "discord.js": "^12.5.1",
-    "dotenv": "^8.2.0",
-    "nodemon": "^2.0.6"
-  },
-  "devDependencies": {},
+  "version": "1.0.0",
+  "main": "anonbot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node anonbot.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/KevinNha/dcAnonBot.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/KevinNha/dcAnonBot/issues"
-  },
-  "homepage": "https://github.com/KevinNha/dcAnonBot#readme",
-  "engines": {
-    "node": "12.x",
-    "npm": "*"
+  "dependencies": {
+    "discord.js": "^12.5.1"
   }
 }
