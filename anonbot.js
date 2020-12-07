@@ -53,7 +53,7 @@ client.on('message', message => {
       }
     })
     .catch(collected => {
-      console.log("User took too long to respond.");
+      console.error("User took too long to respond.");
     })
   }
 });
