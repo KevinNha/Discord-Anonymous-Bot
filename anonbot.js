@@ -53,10 +53,9 @@ client.on('message', message => {
       }
     })
     .catch(collected => {
-      message.reply("You took too long to respond.");
+      console.log("You took too long to respond.");
     })
   }
-  message.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
 });
 
 // To get a list of mutual servers
