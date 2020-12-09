@@ -27,7 +27,7 @@ client.on('message', message => {
     senderID = message.author.id
     common = [];
     getCommon(message)
-      .then(() => {
+      .then((chooseServer) => {
         message.author.send(chooseServer)
         if (message.author.bot && message.channel.type === 'dm') {
           for (i = 0; i < numEmojis; i++) {
