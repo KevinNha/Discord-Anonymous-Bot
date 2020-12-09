@@ -26,35 +26,39 @@ client.on('message', message => {
     msgSender = message.author.username
     senderID = message.author.id
     common = [];
-    getCommon(message);
-  }
+    getCommon(message, () => {
+      if (message.author.bot && message.channel.type === 'dm') {
+        for (i = 0; i < numEmojis; i++) {
+          message.react(emojis[i]);
+        }
 
-  if (message.author.bot && message.channel.type === 'dm') {
-    for (i = 0; i < numEmojis; i++) {
-      message.react(emojis[i]);
-    }
+        const filter = (reaction, user) => {
+          return emojis.includes(reaction.emoji.name) && user.id === anonMsg.author.id;
+        };
 
-    const filter = (reaction, user) => {
-      return emojis.includes(reaction.emoji.name) && user.id === anonMsg.author.id;
-    };
+        message.awaitReactions(filter, {
+            max: 1,
+            time: 60000,
+            error: ['time']
+          })
+          .then(collected => {
+            const reaction = collected.first();
 
-    message.awaitReactions(filter, {max: 1, time: 60000, error: ['time'] })
-    .then(collected => {
-      const reaction = collected.first();
-
-      if (reaction.emoji.name === emojis[0]) {
-        sendMessage(common[0].serverID, anonymousMsg)
-      } else if (reaction.emoji.name === emojis[1]) {
-        sendMessage(common[1].serverID, anonymousMsg)
-      } else if (reaction.emoji.name === emojis[2]) {
-        sendMessage(common[2].serverID, anonymousMsg)
-      } else if (reaction.emoji.name === emojis[3]) {
-        sendMessage(common[3].serverID, anonymousMsg)
+            if (reaction.emoji.name === emojis[0]) {
+              sendMessage(common[0].serverID, anonymousMsg)
+            } else if (reaction.emoji.name === emojis[1]) {
+              sendMessage(common[1].serverID, anonymousMsg)
+            } else if (reaction.emoji.name === emojis[2]) {
+              sendMessage(common[2].serverID, anonymousMsg)
+            } else if (reaction.emoji.name === emojis[3]) {
+              sendMessage(common[3].serverID, anonymousMsg)
+            }
+          })
+          .catch(collected => {
+            console.log("You took too long to respond.");
+          })
       }
-    })
-    .catch(collected => {
-      console.log("You took too long to respond.");
-    })
+    });
   }
 });
 
@@ -72,12 +76,12 @@ async function getCommon(orignalMessage) {
       lastGuild = guild;
     }
   });
-  
+
   client.guilds.cache.forEach(guild => {
     guild.members.fetch(senderID).then(_ => {
-  
+
       guild.members.cache.each(member => {
-  
+
         if (member.user.id == senderID) {
           let toAdd = {
             "serverID": guild.id,
@@ -85,14 +89,14 @@ async function getCommon(orignalMessage) {
             "userID": member.user.id,
             "userName": member.user.username
           };
-  
+
           addCommon(toAdd);
         }
       });
       if (lastGuild == guild) {
         numEmojis = common.length;
         let chooseServer = "To which server would you like to write to?";
-        for (i = 0; i < common.length; i++)  {
+        for (i = 0; i < common.length; i++) {
           chooseServer += "\n" + emojis[i] + common[i].serverName;
         }
         orignalMessage.author.send(chooseServer)
@@ -100,7 +104,6 @@ async function getCommon(orignalMessage) {
     })
   });
 }
-
 
 function addCommon(element) {
   let serverID = element["serverID"];
@@ -115,8 +118,8 @@ function addCommon(element) {
   }
 }
 
-function sendMessage(serverID, message){
+function sendMessage(serverID, message) {
   let guild = client.guilds.cache.get(serverID);
   const channel = guild.channels.cache.find(channel => channel.name.includes(channelName))
-    channel.send(message);
+  channel.send(message);
 }
