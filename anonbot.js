@@ -27,49 +27,52 @@ client.on('message', message => {
     senderID = message.author.id
     common = [];
     getCommon(message)
-      .then((chooseServer) => {
+      .then(() => {
         message.author.send(chooseServer)
-        if (message.author.bot && message.channel.type === 'dm') {
-          for (i = 0; i < numEmojis; i++) {
-            message.react(emojis[i]);
-          }
-      
-          const filter = (reaction, user) => {
-            return emojis.includes(reaction.emoji.name) && user.id === anonMsg.author.id;
-          };
-      
-          message.awaitReactions(filter, {max: 1, time: 60000, error: ['time'] })
-          .then(collected => {
-            const reaction = collected.first();
-      
-            if (reaction.emoji.name === emojis[0]) {
-              sendMessage(common[0].serverID, anonymousMsg)
-            } else if (reaction.emoji.name === emojis[1]) {
-              sendMessage(common[1].serverID, anonymousMsg)
-            } else if (reaction.emoji.name === emojis[2]) {
-              sendMessage(common[2].serverID, anonymousMsg)
-            } else if (reaction.emoji.name === emojis[3]) {
-              sendMessage(common[3].serverID, anonymousMsg)
-            }
-          })
-          .catch(collected => {
-            console.log("You took too long to respond.");
-          })
-        }
-    }).catch(() => {
-      console.log("took too long.")
+      })
+      .catch((data) => {
+        console.log(data);
+      });
+  }
+
+  if (message.author.bot && message.channel.type === 'dm') {
+    for (i = 0; i < numEmojis; i++) {
+      message.react(emojis[i]);
+    }
+
+    const filter = (reaction, user) => {
+      return emojis.includes(reaction.emoji.name) && user.id === anonMsg.author.id;
+    };
+
+    message.awaitReactions(filter, {max: 1, time: 60000, error: ['time'] })
+    .then(collected => {
+      const reaction = collected.first();
+
+      if (reaction.emoji.name === emojis[0]) {
+        sendMessage(common[0].serverID, anonymousMsg)
+      } else if (reaction.emoji.name === emojis[1]) {
+        sendMessage(common[1].serverID, anonymousMsg)
+      } else if (reaction.emoji.name === emojis[2]) {
+        sendMessage(common[2].serverID, anonymousMsg)
+      } else if (reaction.emoji.name === emojis[3]) {
+        sendMessage(common[3].serverID, anonymousMsg)
+      }
+    })
+    .catch(collected => {
+      console.log("You took too long to respond.");
     })
   }
 });
 
 // To get a list of mutual servers
-async function getCommon(orignalMessage, toSend) {
+async function getCommon() {
   let count = 0;
-  client.guilds.cache.forEach(counting => {
+  client.guilds.cache.forEach(() => {
     count++;
   });
   let lastGuild = null;
   let innerCounter = 0;
+  let chooseServer = "";
   client.guilds.cache.forEach(guild => {
     innerCounter++;
     if (innerCounter == count) {
@@ -95,14 +98,18 @@ async function getCommon(orignalMessage, toSend) {
       });
       if (lastGuild == guild) {
         numEmojis = common.length;
-        let chooseServer = "To which server would you like to write to?";
+        chooseServer = "To which server would you like to write to?";
         for (i = 0; i < common.length; i++)  {
           chooseServer += "\n" + emojis[i] + common[i].serverName;
         }
-        toSend(chooseServer);
       }
     })
   });
+  if (common.length != 0) {
+    return chooseServer;
+  } else {
+    throw new Error("List has not been initialized");
+  }
 }
 
 
