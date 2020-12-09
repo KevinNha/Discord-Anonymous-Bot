@@ -105,11 +105,13 @@ async function getCommon() {
       }
     })
   });
-  if (common.length != 0) {
-    return chooseServer;
-  } else {
-    throw new Error("List has not been initialized");
-  }
+  setTimeout(() => {
+    if (common.length != 0) {
+      return chooseServer;
+    } else {
+      throw new Error("List has not been initialized");
+    }
+  }, 5000)
 }
 
 
