@@ -26,34 +26,37 @@ client.on('message', message => {
     msgSender = message.author.username
     senderID = message.author.id
     common = [];
-    getCommon(message);
-  }
-
-  if (message.author.bot && message.channel.type === 'dm') {
-    for (i = 0; i < numEmojis; i++) {
-      message.react(emojis[i]);
-    }
-
-    const filter = (reaction, user) => {
-      return emojis.includes(reaction.emoji.name) && user.id === anonMsg.author.id;
-    };
-
-    message.awaitReactions(filter, {max: 1, time: 60000, error: ['time'] })
-    .then(collected => {
-      const reaction = collected.first();
-
-      if (reaction.emoji.name === emojis[0]) {
-        sendMessage(common[0].serverID, anonymousMsg)
-      } else if (reaction.emoji.name === emojis[1]) {
-        sendMessage(common[1].serverID, anonymousMsg)
-      } else if (reaction.emoji.name === emojis[2]) {
-        sendMessage(common[2].serverID, anonymousMsg)
-      } else if (reaction.emoji.name === emojis[3]) {
-        sendMessage(common[3].serverID, anonymousMsg)
-      }
-    })
-    .catch(collected => {
-      console.log("You took too long to respond.");
+    getCommon(message)
+      .then(() => {
+        if (message.author.bot && message.channel.type === 'dm') {
+          for (i = 0; i < numEmojis; i++) {
+            message.react(emojis[i]);
+          }
+      
+          const filter = (reaction, user) => {
+            return emojis.includes(reaction.emoji.name) && user.id === anonMsg.author.id;
+          };
+      
+          message.awaitReactions(filter, {max: 1, time: 60000, error: ['time'] })
+          .then(collected => {
+            const reaction = collected.first();
+      
+            if (reaction.emoji.name === emojis[0]) {
+              sendMessage(common[0].serverID, anonymousMsg)
+            } else if (reaction.emoji.name === emojis[1]) {
+              sendMessage(common[1].serverID, anonymousMsg)
+            } else if (reaction.emoji.name === emojis[2]) {
+              sendMessage(common[2].serverID, anonymousMsg)
+            } else if (reaction.emoji.name === emojis[3]) {
+              sendMessage(common[3].serverID, anonymousMsg)
+            }
+          })
+          .catch(collected => {
+            console.log("You took too long to respond.");
+          })
+        }
+    }).catch(() => {
+      console.log("took too long.")
     })
   }
 });
