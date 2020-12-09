@@ -80,7 +80,7 @@ const getCommon = async () => {
     }
   });
   
-  client.guilds.cache.forEach(guild => {
+  await client.guilds.cache.forEach(guild => {
     guild.members.fetch(senderID).then(_ => {
   
       guild.members.cache.each(member => {
@@ -93,7 +93,7 @@ const getCommon = async () => {
             "userName": member.user.username
           };
   
-          await addCommon(toAdd);
+          addCommon(toAdd);
         }
       });
       if (lastGuild == guild) {
