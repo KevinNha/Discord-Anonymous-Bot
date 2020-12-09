@@ -28,6 +28,7 @@ client.on('message', message => {
     common = [];
     getCommon(message)
       .then(() => {
+        message.author.send(chooseServer)
         if (message.author.bot && message.channel.type === 'dm') {
           for (i = 0; i < numEmojis; i++) {
             message.react(emojis[i]);
@@ -62,7 +63,7 @@ client.on('message', message => {
 });
 
 // To get a list of mutual servers
-async function getCommon(orignalMessage) {
+async function getCommon(orignalMessage, toSend) {
   let count = 0;
   client.guilds.cache.forEach(counting => {
     count++;
@@ -98,7 +99,7 @@ async function getCommon(orignalMessage) {
         for (i = 0; i < common.length; i++)  {
           chooseServer += "\n" + emojis[i] + common[i].serverName;
         }
-        orignalMessage.author.send(chooseServer)
+        toSend(chooseServer);
       }
     })
   });
