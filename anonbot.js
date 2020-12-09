@@ -36,10 +36,10 @@ async function addReaction(message) {
     .then(server => {
       setTimeout(() => {
         message.author.send(server)
-      }, 2000)
+      }, 1500)
     })
     .catch((data) => {
-      console.log(data);
+      console.log("Something is wrong." + data);
     });
   if (message.author.bot && message.channel.type === 'dm') {
     for (i = 0; i < numEmojis; i++) {
@@ -114,11 +114,7 @@ const getCommon = async () => {
       }
     })
   });
-  if (common.length != 0) {
-    return chooseServer
-  } else {
-    throw new Error("something is wrong.")
-  }
+  return chooseServer;
 }
 
 
