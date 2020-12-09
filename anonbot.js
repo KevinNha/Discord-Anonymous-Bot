@@ -26,8 +26,8 @@ client.on('message', message => {
     msgSender = message.author.username
     senderID = message.author.id
     common = [];
-    addReaction(message);
   }
+  addReaction(message);
 });
 
 
