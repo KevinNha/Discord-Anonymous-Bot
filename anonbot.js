@@ -93,7 +93,7 @@ const getCommon = async () => {
   await client.guilds.cache.forEach(guild => {
     guild.members.fetch(senderID).then(_ => {
 
-      asyncguild.members.cache.each(async member => {
+      guild.members.cache.each(async member => {
 
         if (member.user.id == senderID) {
           let toAdd = {
