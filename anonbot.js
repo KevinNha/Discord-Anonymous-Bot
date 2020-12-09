@@ -27,12 +27,12 @@ client.on('message', message => {
     senderID = message.author.id
     common = [];
   }
-  addReaction(message);
+  addReaction(message, senderID);
 });
 
 
-async function addReaction(message) {
-  await getCommon()
+async function addReaction(message, sentBy) {
+  await getCommon(sentBy)
     .then(server => {
       setTimeout(() => {
         message.author.send(server)
@@ -75,7 +75,7 @@ async function addReaction(message) {
 }
 
 // To get a list of mutual servers
-const getCommon = async () => {
+const getCommon = async (sentBy) => {
   let count = 0;
   client.guilds.cache.forEach(() => {
     count++;
@@ -91,11 +91,11 @@ const getCommon = async () => {
   });
 
   await client.guilds.cache.forEach(guild => {
-    guild.members.fetch(senderID).then(_ => {
+    guild.members.fetch(sentBy).then(_ => {
 
       guild.members.cache.each(member => {
 
-        if (member.user.id == senderID) {
+        if (member.user.id == sentBy) {
           let toAdd = {
             "serverID": guild.id,
             "serverName": guild.name,
