@@ -26,9 +26,9 @@ client.on('message', message => {
     msgSender = message.author.username
     senderID = message.author.id
     common = [];
-    getCommon(message)
-      .then(() => {
-        message.author.send(chooseServer)
+    getCommon()
+      .then(server => {
+        message.author.send(server)
       })
       .catch((data) => {
         console.log(data);
@@ -65,7 +65,7 @@ client.on('message', message => {
 });
 
 // To get a list of mutual servers
-async function getCommon() {
+const getCommon = async () => {
   let count = 0;
   client.guilds.cache.forEach(() => {
     count++;
@@ -73,14 +73,14 @@ async function getCommon() {
   let lastGuild = null;
   let innerCounter = 0;
   let chooseServer = "";
-  client.guilds.cache.forEach(guild => {
+  await client.guilds.cache.forEach(guild => {
     innerCounter++;
     if (innerCounter == count) {
       lastGuild = guild;
     }
   });
   
-  client.guilds.cache.forEach(guild => {
+  await client.guilds.cache.forEach(guild => {
     guild.members.fetch(senderID).then(_ => {
   
       guild.members.cache.each(member => {
@@ -105,14 +105,13 @@ async function getCommon() {
       }
     })
   });
-  setTimeout(() => {
-    if (common.length != 0) {
-      return chooseServer;
-    } else {
-      throw new Error("List has not been initialized");
-    }
-  }, 5000)
+  if (common.length != 0) {
+    return chooseServer
+  } else {
+    throw new Error("something is wrong.")
+  }
 }
+
 
 
 function addCommon(element) {
