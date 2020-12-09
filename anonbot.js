@@ -34,7 +34,9 @@ client.on('message', message => {
 async function addReaction(message) {
   await getCommon()
     .then(server => {
-      message.author.send(server)
+      setTimeout(() => {
+        message.author.send(server)
+      }, 2000)
     })
     .catch((data) => {
       console.log(data);
@@ -100,7 +102,6 @@ const getCommon = async () => {
             "userID": member.user.id,
             "userName": member.user.username
           };
-
           addCommon(toAdd);
         }
       });
