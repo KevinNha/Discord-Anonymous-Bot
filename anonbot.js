@@ -93,7 +93,7 @@ const getCommon = async () => {
             "userName": member.user.username
           };
   
-          addCommon(toAdd);
+          await addCommon(toAdd);
         }
       });
       if (lastGuild == guild) {
