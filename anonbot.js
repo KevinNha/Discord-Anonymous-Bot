@@ -80,7 +80,7 @@ const getCommon = async () => {
     }
   });
   
-  await client.guilds.cache.forEach(guild => {
+  client.guilds.cache.forEach(guild => {
     guild.members.fetch(senderID).then(_ => {
   
       guild.members.cache.each(member => {
