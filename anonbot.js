@@ -18,6 +18,7 @@ client.once('ready', () => {
   console.log('Ready!');
 });
 
+
 client.on('message', message => {
   // Takes the message from user
   if (message.channel.type === 'dm' && !message.author.bot) {
@@ -91,7 +92,7 @@ const getCommon = async (sentBy) => {
   });
 
   await client.guilds.cache.forEach(guild => {
-    guild.members.fetch(sentBy).then(_ => {
+    guild.members.fetch(sentBy).then(() => {
 
       guild.members.cache.each(member => {
 
