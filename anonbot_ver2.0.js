@@ -1,7 +1,7 @@
 // Global Variables
 var common = [];
 var anonymousMsg = "";
-let msgSender = null;
+var senderID = "";
 var emojis = ['🐶', '🐱', '🐭', '🐹']
 const channelName = "anonbot";
 const config = require('dotenv').config();
@@ -18,11 +18,14 @@ client.once('ready', () => {
 client.on('message', message => {
   // A private message from a non-bot user
   if (message.channel.type === 'dm' && !message.author.bot) {
-    var senderID = message.author.id
+    senderID = message.author.id
+    anonymousMsg = message.content;
     findCommon(senderID, message.author);
   } else if (message.content.includes("To which server would you")) {
-    // addReaction(message);
-    null
+    for (i = 0; i < common.length; i++) {
+      message.react(emojis[i]);
+    }
+    selectReaction(message);
   }
 });
 
@@ -47,4 +50,33 @@ async function findCommon(sentByID, sentByUser) {
     }
     sentByUser.send(confirm)
   }, 500);
+}
+
+function selectReaction(message) {
+  const filter = (reaction, user) => {
+    return emojis.includes(reaction.emoji.name) && user.id === senderID;
+  };
+  message.awaitReactions(filter, {
+      max: 1,
+      time: 60000,
+      error: ['time']
+    })
+    .then(collected => {
+      const reaction = collected.first();
+
+      for (i = 0; i < common.length; i++) {
+        if (reaction.emoji.name === emojis[i]) {
+          sendMessage(common[i].id, anonymousMsg)
+        }
+      }
+    })
+    .catch(() => {
+      console.log("You took too long to respond.");
+    })
+}
+
+function sendMessage(serverID, message) {
+  let guild = client.guilds.cache.get(serverID);
+  const channel = guild.channels.cache.find(channel => channel.name.includes(channelName))
+  channel.send(message);
 }

@@ -46,8 +46,11 @@ async function addReaction(message, sentBy) {
     for (i = 0; i < numEmojis; i++) {
       message.react(emojis[i]);
     }
-
     const filter = (reaction, user) => {
+      console.log(user.id)
+      console.log(anonMsg.author.id)
+      console.log(emojis.includes(reaction.emoji.name))
+      console.log(user.id === senderID)
       return emojis.includes(reaction.emoji.name) && user.id === anonMsg.author.id;
     };
 
