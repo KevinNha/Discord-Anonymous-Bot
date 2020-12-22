@@ -17,7 +17,7 @@ client.once('ready', () => {
     status: 'online',
     activity: {
       name: 'Send me a message you\'d like to be anonymous!',
-      type: 'game',
+      type: 'CUSTOM_STATUS',
       url: "https://github.com/KevinNha/Discord-Anonymous-Bot"
     }
   })
@@ -26,6 +26,7 @@ client.once('ready', () => {
 client.on('message', message => {
   // A private message from a non-bot user
   if (message.channel.type === 'dm' && !message.author.bot) {
+    console.log("Received a message");
     senderID = message.author.id
     anonymousMsg = message.content;
     findCommon(senderID, message.author);
