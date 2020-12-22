@@ -16,7 +16,6 @@ client.login(process.env.TOKEN);
 
 client.once('ready', () => {
   console.log('Ready!');
-  client.user.setActivity("Hi! Just Send DM me the message you'd like to send anonymously and I'll send it for you.");
 });
 
 

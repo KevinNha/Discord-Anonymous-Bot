@@ -13,6 +13,14 @@ client.login(process.env.TOKEN);
 
 client.once('ready', () => {
   console.log('Ready!');
+  client.user.setPresence({
+    status: 'online',
+    activity: {
+      name: 'Send me a message you\'d like to be anonymous!',
+      type: 'game',
+      url: "https://github.com/KevinNha/Discord-Anonymous-Bot"
+    }
+  })
 });
 
 client.on('message', message => {
