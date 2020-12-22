@@ -2,7 +2,7 @@
 var common = [];
 var anonymousMsg = "";
 var senderID = "";
-var emojis = ['🐶', '🐱', '🐭', '🐹']
+var emojis = ['🐶', '🐱', '🐭', '🐹', '🐻', '🐼']
 const channelName = "anonbot";
 const config = require('dotenv').config();
 
