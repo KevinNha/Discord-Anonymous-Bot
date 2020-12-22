@@ -17,7 +17,7 @@ client.once('ready', () => {
     status: 'online',
     activity: {
       name: 'Send me a message you\'d like to be anonymous!',
-      type: 'CUSTOM_STATUS',
+      type: 'PLAYING',
       url: "https://github.com/KevinNha/Discord-Anonymous-Bot"
     }
   })
