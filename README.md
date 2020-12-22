@@ -13,8 +13,8 @@ This is a Discord bot that allows users to send messages to a server anonymously
 Should there be any errors with the bot, please send a DM to CabonNa#1867 or an email to hyunjinnha@gmail.com
 
 ## Contributors
-*KevinNha
-*Reo Tamai (reotam5)
+* KevinNha
+* Reo Tamai (reotam5)
 
 ## Written Using
 * JavaScript
