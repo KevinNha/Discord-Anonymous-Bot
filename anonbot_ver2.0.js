@@ -16,8 +16,8 @@ client.once('ready', () => {
   client.user.setPresence({
     status: 'online',
     activity: {
-      name: 'Send me a message you\'d like to be anonymous!',
-      type: 'PLAYING',
+      name: '\"Send me a message you\'d like to be anonymous!\"',
+      type: 'STREAMING',
       url: "https://github.com/KevinNha/Discord-Anonymous-Bot"
     }
   })
